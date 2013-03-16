@@ -48,7 +48,7 @@ exports.google = function(req, res, next) {
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.google.com/reader/api'
     ],
-    access_type: 'offline'
+    accessType: 'offline'
   })(req, res, next);
 };
 
@@ -61,24 +61,32 @@ exports.googleCallback = function(req, res, next) {
 
     var User = model.User;
 
-    var email = profile._json.email;
     // Find out if the user is already registered
-    User.findOne({ email: email }, function(error, user) {
+    User.findOne({ googleId: profile.id }, function(error, user) {
       if(error) return next(error);
 
-      if(!user || !user.hash) {
-        // User is not registered, save the profile in session and redirect to registration page
-        req.session.newUser = {
+      if(!user) {
+        // User is not registered, create an account
+        user = new User({
+          googleId: profile.id,
           name: profile.displayName,
-          email: email,
-          provider: 'google',
-          profile: profile._json
-        };
-        res.redirect('/register');
+          profile: profile
+        });
+
+        user.save(function(error) {
+          if(error) return next(error);
+
+          // Establish a session
+          req.logIn(user, function(error) {
+            if(error) return next(error);
+
+            redirectBackOrHome(req, res);
+          });
+        });
 
       } else {
-        user.google = profile;
-        user.markModified('google');
+        user.profile = profile;
+        user.markModified('profile');
 
         user.save(function(error) {
           if(error) return next(error);

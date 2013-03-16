@@ -94,6 +94,9 @@ module.exports = (function() {
   // Routes
   require('./routes')(app);
 
+  // Initialize Models
+  require('../models')();
+
   return app;
 })();
 

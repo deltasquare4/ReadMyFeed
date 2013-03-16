@@ -5,7 +5,9 @@
  * the database. Then create a connection to Mongo.
  *
  */
-var mongoose = require("mongoose")
+var _ = require('lodash')
+  , fs = require('fs')
+  , mongoose = require("mongoose")
   , config = require("../config")
   , fileutils = require('../lib/fileutils');
 
@@ -23,7 +25,7 @@ module.exports = exports = function() {
  
   // Connect to the database
   log.info('Connecting to MongoDB.');
-  mongoose.connect(config.dbUri);
+  mongoose.connect(config.get('db:address') + config.get('db:database'));
  
   mongoose.connection.on('open', function() {
     log.info('MongoDB connection established.');
@@ -48,16 +50,15 @@ exports.initializeModel = function(modelFilename) {
 
   // load the schema and model
   var config = fileutils.require(['models', 'schemas', modelFilename]);
-
   var modelName = config.name
     , schema = config.schema;
 
-  if(config.plugins) {
-    this.loadPlugins(schema, config.plugins);
-  }
+  schema = this.loadStatics(schema, modelFilename);
+  schema = this.loadMethods(schema, modelFilename);
 
-  this.loadMethods(schema, modelName);
-  this.loadStatics(schema, modelName);
+  if(config.plugins) {
+    schema = this.loadPlugins(schema, config.plugins);
+  }
 
   // local the mongoose model and cache it in the exports models
   exports.models[modelName] = mongoose.model(modelName, schema);
@@ -66,7 +67,7 @@ exports.initializeModel = function(modelFilename) {
 exports.loadPlugins = function(schema, plugins) {
 
   for (var i = plugins.length - 1; i >= 0; i--) {    
-    var plugin = fileutils.require(['models', 'plugins', plugins[i]]);
+    var plugin = fileutils.require(['models', 'plugins', plugins[i] + '.js']);
 
     if(!plugin) {
       throw new Error('Invalid Plugin');
@@ -74,10 +75,12 @@ exports.loadPlugins = function(schema, plugins) {
 
     schema.plugin(plugin);
   }
+
+  return schema;
 };
 
 exports.loadMethods = function(schema, modelName) {
-  var methods = fileutils.require(['model', 'methods', modelName], false);
+  var methods = fileutils.require(['models', 'methods', modelName], false);
   if(methods) {
     var methodNames = _.keys(methods);
 
@@ -90,10 +93,11 @@ exports.loadMethods = function(schema, modelName) {
       schema.methods[methodName] = methods[methodName];
     }
   }
+  return schema;
 };
 
 exports.loadStatics = function(schema, modelName) {
-  var statics = fileutils.require(['model', 'statics', modelName], false);
+  var statics = fileutils.require(['models', 'statics', modelName], false);
   if(statics) {
     var staticNames = _.keys(statics);
 
@@ -106,5 +110,5 @@ exports.loadStatics = function(schema, modelName) {
       schema.statics[staticName] = statics[staticName];
     }
   }
-
+  return schema;
 };
