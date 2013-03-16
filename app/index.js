@@ -45,10 +45,10 @@ module.exports = (function() {
     // Notification propogator
     app.use(function(req, res, next){
       if(req.method === 'GET') {
-        // expose "error" and "message" to all
-        // views that are rendered.
-        res.local('error', req.session.error || undefined);
-        res.local('message', req.session.message || undefined);
+        // expose "error" and "message" to all views that are rendered.
+        res.locals.error = req.session.error || undefined;
+        res.locals.message = req.session.message || undefined;
+
         // remove them so they're not displayed on subsequent renders
         delete req.session.error;
         delete req.session.message;

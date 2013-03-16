@@ -23,10 +23,10 @@ var exports = module.exports = function(app) {
   app.all('/*', function(req, res, next) {
 
     if(req.isAuthenticated()) {
-      res.local('isLoggedIn', true);
-      res.local('user', req.user);
+      res.locals.isLoggedIn = true;
+      res.locals.user = req.user;
     } else {
-      res.local('isLoggedIn', false);
+      res.locals.isLoggedIn = false;
     }
 
     next();
