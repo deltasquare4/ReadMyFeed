@@ -2,13 +2,14 @@ var async = require('async')
   , _ = require('lodash');
 
 /*
- * Statics for count model
+ * Statics for feed model
  */
 module.exports = {
-  importFeeds: function (feedlist) {
+  // Import array of fields in the database
+  importFeeds: function (feedlist, callback) {
     var self = this;
 
-    async.forEach(feedlist, function(feed, callback) {
+    async.map(feedlist, function(feed, callback) {
 
       var regEx = /^feed\/([\S]+)/;
       var feedUrl = regEx.exec(feed.id)[1];
@@ -20,8 +21,6 @@ module.exports = {
         // Add it if it doesn't exist
         if(!dbFeed) {
           var categories = _.map(feed.categories, 'label');
-
-          log.info("Cats for " + feed.title, categories);
 
           dbFeed = new self({
             title: feed.title,

@@ -4,9 +4,4 @@ module.exports = function(schema, options) {
     firstItemTimestamp: Number,
     lastUpdated: { type: Date, default: Date.now }
   });
-
-  schema.pre('save', function (callback) {
-    this.lastUpdated = new Date();
-    callback();
-  });
 };

@@ -82,16 +82,7 @@ exports.loadPlugins = function(schema, plugins) {
 exports.loadMethods = function(schema, modelName) {
   var methods = fileutils.require(['models', 'methods', modelName], false);
   if(methods) {
-    var methodNames = _.keys(methods);
-
-    if(methodNames.length === 0) {
-      return;
-    }
-
-    for (var i = methodNames.length - 1; i >= 0; i--) {
-      var methodName = methodNames[i];
-      schema.methods[methodName] = methods[methodName];
-    }
+    schema.method(methods);
   }
   return schema;
 };
@@ -99,16 +90,7 @@ exports.loadMethods = function(schema, modelName) {
 exports.loadStatics = function(schema, modelName) {
   var statics = fileutils.require(['models', 'statics', modelName], false);
   if(statics) {
-    var staticNames = _.keys(statics);
-
-    if(staticNames.length === 0) {
-      return;
-    }
-
-    for (var i = staticNames.length - 1; i >= 0; i--) {
-      var staticName = staticNames[i];
-      schema.statics[staticName] = statics[staticName];
-    }
+    schema.static(statics);
   }
   return schema;
 };
