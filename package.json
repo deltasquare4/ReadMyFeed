@@ -1,0 +1,27 @@
+{
+  "name": "ReadMyFeed",
+  "version": "0.0.1",
+  "scripts": {
+    "test": "make test",
+    "run": "node server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "async": "latest",
+    "lodash": "latest",
+    "redis": "0.8.x",
+    "jade": "0.28.x",
+    "express": "3.x",
+    "winston": "0.6.x",
+    "mongoose": "3.5.x",
+    "feedparser": "0.13.x",
+    "stylus": "0.32.x",
+    "passport": "0.1.x",
+    "passport-google-oauth": "0.1.x",
+    "nconf": "0.6.x"
+  },
+  "devDependencies": {
+    "mocha": "latest",
+    "chai": "latest"
+  }
+}
