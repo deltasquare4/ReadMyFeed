@@ -22,6 +22,7 @@ var Synchronizer = module.exports = function() {
         access_token: profile.accessToken
       }
     }, function(error, res, body) {
+      if(error) { throw error; }
 
       // Parse if string
       if(typeof(body) === 'string') {
@@ -32,17 +33,32 @@ var Synchronizer = module.exports = function() {
 
       // Import feeds into database
       var Feed = models.Feed;
-      Feed.importFeeds(body.subscriptions);
+      Feed.importFeeds(body.subscriptions, function(error, feeds) {
+        if(error) { throw error; }
+  
+        // Mark the user's feeds as synchronized
+        var User = models.User;
+        User.findOne({ googleId: profile.id }, function(error, user) {
+          if(error) { throw error; }
+    
+          user.saveFeeds(feeds);
+          user.markFeedSynchronized();
+        });
 
-      // Mark the user's feeds as synchronized
-      var User = models.User;
-      User.markFeedSynchronized({ googleId: profile.id });
+      });
     });
   });
 
 
-  // TODO: Listen to the feed process channel and update items
+  // Listen to the feed process channel and update articles
+  syncManager.subscribe('feeds', function(topic, feed) {
+    feedparser.parseUrl(feed.feedUrl, options, function(error, meta, articles) {
+      if(error) { log.error(error); throw error; }
 
+      // TODO: Save articles in database
+
+    });
+  });
 
   // TODO: Setup feed sync loop
 

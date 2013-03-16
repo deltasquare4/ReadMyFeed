@@ -29,18 +29,24 @@ module.exports = {
             categories: categories
           });
 
-          dbFeed.save(callback);
+          dbFeed.save(function(error) {
+            callback(error, dbFeed.id);
+          });
         } else {
-          callback();
+          callback(null, dbFeed.id);
         }
       });
-    }, function(error) {
+    }, function(error, feeds) {
       if(error) {
         log.error('Error Importing Feeds', error);
-        throw error;
+        return callback(error);
       }
       
-      log.debug('Feeds imported successfully.');
+      log.debug('Feeds imported successfully.', feeds);
+
+      callback(null, feeds);
     });
-  }
+  },
+
+
 };
