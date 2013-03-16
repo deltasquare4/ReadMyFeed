@@ -3,7 +3,7 @@
  */
 module.exports = {
   markAsUpdated: function () {
-    feed.lastUpdated = new Date();
-    feed.save();
+    this.lastUpdated = new Date();
+    this.save();
   }
 };

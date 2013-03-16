@@ -8,7 +8,8 @@
 
 var request = require('request')
   , syncManager = require('./syncManager')
-  , models = require('../models');
+  , models = require('../models')
+  , feedparser = require('feedparser');
 
 
 var Synchronizer = module.exports = function() {
@@ -52,6 +53,9 @@ var Synchronizer = module.exports = function() {
 
   // Listen to the feed process channel and update articles
   syncManager.subscribe('feeds', function(topic, feed) {
+    var options = {
+    };
+
     feedparser.parseUrl(feed.feedUrl, options, function(error, meta, articles) {
       if(error) { log.error(error); throw error; }
 

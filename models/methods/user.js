@@ -20,7 +20,7 @@ module.exports = {
     Feed.find()
       .where('id').in(feedIds)
       .exec(function(error, feeds) {
-        if(error) { log.error("Error saving feeds", error); throw error; }
+        if(error) { log.error('Error saving feeds', error); throw error; }
 
         if(!user.feeds instanceof Array) {
           user.feeds = [];

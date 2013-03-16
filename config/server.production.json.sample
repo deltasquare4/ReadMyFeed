@@ -1,7 +1,7 @@
 {
   "site": {
-    "hostname": "localhost",
-    "port": 3000,
+    "hostname": "yoursite.com",
+    "port": 80,
     "email": "<EMAIL>"
   },
   "auth": {
