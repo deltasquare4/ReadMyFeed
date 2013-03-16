@@ -1,7 +1,8 @@
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
-var model = require('../../models');
+var model = require('../../models')
+  , feedManager = require('../../synchronizer/feedManager');
 
 var exports = module.exports = {};
 
@@ -91,6 +92,9 @@ exports.googleCallback = function(req, res, next) {
           // Establish a session
           req.logIn(user, function(error) {
             if(error) { return next(error); }
+
+            // Queue the user's Reader subscriptions to be synchronized
+            feedManager.queueUserForSync(profile);
 
             redirectBackOrHome(req, res);
           });

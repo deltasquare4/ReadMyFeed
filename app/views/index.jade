@@ -1,5 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .hero-unit
+    h1= title
+    p #{title} is a simple RSS/Atom feed aggregator. Log in using your existing
+     | Google account and it will automatically import all your subscriptions.
+
+    - if(!isLoggedIn)
+      p
+        a.btn.btn-primary.btn-large(href='/auth/google') Register

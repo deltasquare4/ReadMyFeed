@@ -6,7 +6,8 @@ var mongoose = require('mongoose')
 var UserSchema = new Schema({
   googleId: { type: String, unique: true },
   name: { type: String, trim: true },
-  profile: {}
+  profile: {},
+  feedSyncStatus: { type: String, default: 'pending', enum: ['pending', 'complete'] }
 }, {
   collection: 'users'
 });

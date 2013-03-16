@@ -18,7 +18,9 @@
     "stylus": "0.32.x",
     "passport": "0.1.x",
     "passport-google-oauth": "0.1.x",
-    "nconf": "0.6.x"
+    "nconf": "0.6.x",
+    "request": "2.x",
+    "ascoltatori": "0.3.x"
   },
   "devDependencies": {
     "mocha": "latest",
