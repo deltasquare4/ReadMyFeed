@@ -7,8 +7,8 @@
  */
 var _ = require('lodash')
   , fs = require('fs')
-  , mongoose = require("mongoose")
-  , config = require("../config")
+  , mongoose = require('mongoose')
+  , config = require('../config')
   , fileutils = require('../lib/fileutils');
 
 /**
@@ -66,7 +66,7 @@ exports.initializeModel = function(modelFilename) {
 
 exports.loadPlugins = function(schema, plugins) {
 
-  for (var i = plugins.length - 1; i >= 0; i--) {    
+  for (var i = plugins.length - 1; i >= 0; i--) {
     var plugin = fileutils.require(['models', 'plugins', plugins[i] + '.js']);
 
     if(!plugin) {

@@ -13,7 +13,7 @@ module.exports = function(schema, options) {
     
     if(!self.id) {
       Count.getNext(name, function(error, id) {
-        if(error) return callback(error);
+        if(error) { return callback(error); }
         
         self.id = id;
         callback();

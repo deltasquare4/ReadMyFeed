@@ -5,6 +5,18 @@ var model = require('../../models');
 
 var exports = module.exports = {};
 
+var redirectBackOrHome = function(req, res) {
+  var redirectTo = req.session.redirectTo;
+  delete req.session.redirectTo;
+
+  if(redirectTo && typeof(redirectTo) === 'string') {
+    res.redirect(redirectTo);
+  } else {
+    res.redirect('/');
+  }
+};
+
+
 exports.getMiddleware = function(config) {
 
   var hostname = 'http://' + config.get('site:hostname') + ':' + config.get('site:port');
@@ -53,17 +65,17 @@ exports.google = function(req, res, next) {
 };
 
 exports.googleCallback = function(req, res, next) {
-  passport.authenticate('google', { 
+  passport.authenticate('google', {
     failureRedirect: '/auth'
   },
   function(error, profile, info) {
-    if(error) return next(error);
+    if(error) { return next(error); }
 
     var User = model.User;
 
     // Find out if the user is already registered
     User.findOne({ googleId: profile.id }, function(error, user) {
-      if(error) return next(error);
+      if(error) { return next(error); }
 
       if(!user) {
         // User is not registered, create an account
@@ -74,11 +86,11 @@ exports.googleCallback = function(req, res, next) {
         });
 
         user.save(function(error) {
-          if(error) return next(error);
+          if(error) { return next(error); }
 
           // Establish a session
           req.logIn(user, function(error) {
-            if(error) return next(error);
+            if(error) { return next(error); }
 
             redirectBackOrHome(req, res);
           });
@@ -89,11 +101,11 @@ exports.googleCallback = function(req, res, next) {
         user.markModified('profile');
 
         user.save(function(error) {
-          if(error) return next(error);
+          if(error) { return next(error); }
 
           // Establish a session
           req.logIn(user, function(error) {
-            if(error) return next(error);
+            if(error) { return next(error); }
 
             redirectBackOrHome(req, res);
           });
@@ -101,16 +113,5 @@ exports.googleCallback = function(req, res, next) {
       }
     });
   })(req, res, next);
-};
-
-var redirectBackOrHome = function(req, res) {
-  var redirectTo = req.session.redirectTo;
-  delete req.session.redirectTo;
-
-  if(redirectTo && typeof(redirectTo) == 'string') {
-    res.redirect(redirectTo);
-  } else {
-    res.redirect('/');
-  }
 };
 

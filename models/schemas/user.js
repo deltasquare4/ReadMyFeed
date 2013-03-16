@@ -19,6 +19,6 @@ var UserSchema = new Schema({
 module.exports = {
   name: 'User',
   schema: UserSchema,
-  plugins: ['id', 'timestamp']    
+  plugins: ['id', 'timestamp']
 };
 
