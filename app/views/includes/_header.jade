@@ -1,0 +1,16 @@
+mixin header
+  .navbar.navbar-inverse.navbar-static-top
+    .navbar-inner
+      .container
+        a.brand(href='/') Read My Feed
+        ul.nav.pull-right.nav-collapse
+          -if(!isLoggedIn)
+            li
+              a(href='/auth/google')
+                i.icon-user.icon
+                |  Sign In
+          -if(isLoggedIn)
+            li
+              a(href='/logout')
+                i.icon-star-empty.icon
+                |  Sign Out

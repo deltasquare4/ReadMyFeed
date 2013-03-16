@@ -39,6 +39,7 @@ var exports = module.exports = function(app) {
 
   app.get('/auth/google', auth.google);
   app.get('/auth/google/callback', auth.googleCallback);
+  app.get('/logout', auth.logout);
 
 
 };
