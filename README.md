@@ -33,7 +33,7 @@ ReadMyFeed is a node.js based, self-hosted RSS/Atom feed aggregator.
 git clone git://github.com/deltasquare4/ReadMyFeed.git
 cd ReadMyFeed && npm install
 
-// Rename config/server.*.json.sample to config/server.*.json and replace placeholders with relevant information
+# Rename config/server.*.json.sample to config/server.*.json and replace placeholders with relevant information
 cp config/server.development.json.sample config/server.development.json
 
 # run
