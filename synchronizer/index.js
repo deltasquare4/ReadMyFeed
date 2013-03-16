@@ -7,13 +7,13 @@
  */
 
 var request = require('request')
-  , feedManager = require('./feedManager')
+  , syncManager = require('./syncManager')
   , models = require('../models');
 
 
 var Synchronizer = module.exports = function() {
 
-  feedManager.subscribe('users', function(topic, profile) {
+  syncManager.subscribe('users', function(topic, profile) {
 
     request.get({
       url: 'https://www.google.com/reader/api/0/subscription/list',

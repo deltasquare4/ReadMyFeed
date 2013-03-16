@@ -2,7 +2,7 @@ var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
 var model = require('../../models')
-  , feedManager = require('../../synchronizer/feedManager');
+  , syncManager = require('../../synchronizer/syncManager');
 
 var exports = module.exports = {};
 
@@ -94,7 +94,7 @@ exports.googleCallback = function(req, res, next) {
             if(error) { return next(error); }
 
             // Queue the user's Reader subscriptions to be synchronized
-            feedManager.queueUserForSync(profile);
+            syncManager.queueUserForSync(profile);
 
             redirectBackOrHome(req, res);
           });
