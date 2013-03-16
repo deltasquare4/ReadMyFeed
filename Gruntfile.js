@@ -36,6 +36,7 @@ module.exports = function(grunt) {
             },
             uses_defaults: [
                 'app/**/*.js',
+                '!app/public/**/*.js',
                 'config/**/*.js',
                 'lib/**/*.js',
                 'models/**/*.js',
